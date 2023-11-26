@@ -288,7 +288,7 @@ public class clientes extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable TableCliente;
+    public javax.swing.JTable TableCliente;
     private javax.swing.JButton btnEditarCliente;
     private javax.swing.JButton btnEliminarCliente;
     private javax.swing.JButton btnGuardarCliente;

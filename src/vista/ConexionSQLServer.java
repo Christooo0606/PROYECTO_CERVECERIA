@@ -5,6 +5,8 @@ import java.sql.SQLException;
 public class ConexionSQLServer {
     // Cambia estos valores según tu configuración
     private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=GrupoModelo";
+
+
     private static final String USUARIO = "usersql";
     private static final String CONTRASENA = "root";
 
