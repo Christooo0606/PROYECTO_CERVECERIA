@@ -6,23 +6,20 @@ package vista;
 
 
 import java.util.Date;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import javax.swing.table.DefaultTableModel;
-
-
-
+import vista.ConexionSQlServe;
 
 /**
  *
@@ -79,6 +76,7 @@ public class nuevaVenta extends javax.swing.JPanel {
         jPanel25 = new javax.swing.JPanel();
         txtNombreCliente = new javax.swing.JTextField();
         TotalPagar = new javax.swing.JTextField();
+        Lista_Productos = new javax.swing.JComboBox<>();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -86,20 +84,20 @@ public class nuevaVenta extends javax.swing.JPanel {
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel3.setText("Código");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
+        jLabel3.setText("ID_producto");
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 50, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setText("Descripción");
-        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 50, -1, -1));
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 50, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setText("Cant");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 50, -1, -1));
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 50, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setText("Precio");
-        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 50, -1, -1));
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 50, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 255));
@@ -121,7 +119,7 @@ public class nuevaVenta extends javax.swing.JPanel {
                 txtCodigoVentaKeyTyped(evt);
             }
         });
-        jPanel2.add(txtCodigoVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 102, 30));
+        jPanel2.add(txtCodigoVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 70, 102, 30));
 
         txtDescripcionVenta.setBackground(new java.awt.Color(204, 204, 204));
         txtDescripcionVenta.setBorder(null);
@@ -135,7 +133,7 @@ public class nuevaVenta extends javax.swing.JPanel {
                 txtDescripcionVentaKeyTyped(evt);
             }
         });
-        jPanel2.add(txtDescripcionVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 70, 191, 30));
+        jPanel2.add(txtDescripcionVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 70, 191, 30));
 
         txtCantidadVenta.setBackground(new java.awt.Color(204, 204, 204));
         txtCantidadVenta.setBorder(null);
@@ -152,7 +150,7 @@ public class nuevaVenta extends javax.swing.JPanel {
                 txtCantidadVentaKeyTyped(evt);
             }
         });
-        jPanel2.add(txtCantidadVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 70, 40, 30));
+        jPanel2.add(txtCantidadVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 70, 40, 30));
 
         txtPrecioVenta.setEditable(false);
         txtPrecioVenta.setBackground(new java.awt.Color(204, 204, 204));
@@ -162,11 +160,16 @@ public class nuevaVenta extends javax.swing.JPanel {
                 txtPrecioVentaActionPerformed(evt);
             }
         });
-        jPanel2.add(txtPrecioVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 70, 80, 30));
+        jPanel2.add(txtPrecioVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 70, 80, 30));
 
         txtStockDisponible.setEditable(false);
         txtStockDisponible.setBackground(new java.awt.Color(204, 204, 204));
         txtStockDisponible.setBorder(null);
+        txtStockDisponible.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtStockDisponibleActionPerformed(evt);
+            }
+        });
         jPanel2.add(txtStockDisponible, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 110, 79, 30));
 
         TableVenta.setModel(new javax.swing.table.DefaultTableModel(
@@ -174,7 +177,7 @@ public class nuevaVenta extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID", "DESCRIPCIÓN", "CANTIDAD", "PRECIO U.", "PRECIO TOTAL"
+                "ID_productos", "DESCRIPCIÓN", "CANTIDAD", "PRECIO U.", "PRECIO TOTAL"
             }
         ) {
             Class[] types = new Class [] {
@@ -243,13 +246,13 @@ public class nuevaVenta extends javax.swing.JPanel {
                 btnAgregarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 60, -1, -1));
+        jPanel2.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 60, -1, -1));
 
         Midate.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel2.add(Midate, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 70, 210, 30));
+        jPanel2.add(Midate, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 70, 120, 30));
 
         jLabel11.setText("Seleccionar:");
-        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 50, -1, -1));
+        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 50, -1, -1));
 
         jPanel14.setBackground(new java.awt.Color(0, 110, 255));
 
@@ -279,7 +282,7 @@ public class nuevaVenta extends javax.swing.JPanel {
             .addGap(0, 2, Short.MAX_VALUE)
         );
 
-        jPanel2.add(jPanel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, -1, 2));
+        jPanel2.add(jPanel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 100, -1, 2));
 
         jPanel20.setBackground(new java.awt.Color(0, 110, 255));
 
@@ -294,7 +297,7 @@ public class nuevaVenta extends javax.swing.JPanel {
             .addGap(0, 2, Short.MAX_VALUE)
         );
 
-        jPanel2.add(jPanel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 100, 190, 2));
+        jPanel2.add(jPanel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 100, 190, 2));
 
         jPanel21.setBackground(new java.awt.Color(0, 110, 255));
 
@@ -309,7 +312,7 @@ public class nuevaVenta extends javax.swing.JPanel {
             .addGap(0, 2, Short.MAX_VALUE)
         );
 
-        jPanel2.add(jPanel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 100, 40, 2));
+        jPanel2.add(jPanel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 100, 40, 2));
 
         jPanel22.setBackground(new java.awt.Color(0, 110, 255));
 
@@ -324,7 +327,7 @@ public class nuevaVenta extends javax.swing.JPanel {
             .addGap(0, 2, Short.MAX_VALUE)
         );
 
-        jPanel2.add(jPanel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 100, 80, 2));
+        jPanel2.add(jPanel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 100, 80, 2));
 
         jPanel23.setBackground(new java.awt.Color(0, 110, 255));
 
@@ -384,6 +387,14 @@ public class nuevaVenta extends javax.swing.JPanel {
         TotalPagar.setText("- - - - ");
         jPanel2.add(TotalPagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 380, 90, -1));
 
+        Lista_Productos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        Lista_Productos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Lista_ProductosActionPerformed(evt);
+            }
+        });
+        jPanel2.add(Lista_Productos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 100, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -406,6 +417,9 @@ public class nuevaVenta extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
+    
     private void txtCodigoVentaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoVentaKeyPressed
         // TODO add your handling code here:
       
@@ -425,7 +439,25 @@ public class nuevaVenta extends javax.swing.JPanel {
         // TODO add your handling code here:
        
     }//GEN-LAST:event_txtCantidadVentaKeyPressed
+    
+    
+    private ArrayList<String> obtenerNombresProductos(Connection conexion) throws SQLException {
+    ArrayList<String> nombresProductos = new ArrayList<>();
 
+    String sql = "SELECT Nombre FROM Productos";
+    try (PreparedStatement statement = conexion.prepareStatement(sql);
+         ResultSet resultSet = statement.executeQuery()) {
+
+        while (resultSet.next()) {
+            String nombreProducto = resultSet.getString("Nombre");
+            nombresProductos.add(nombreProducto);
+        }
+    }
+
+    return nombresProductos;
+}
+    
+    
     private void txtCantidadVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadVentaKeyTyped
         // TODO add your handling code here:
       
@@ -666,8 +698,43 @@ private double calcularTotalAPagar() {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreClienteActionPerformed
 
+    private void Lista_ProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Lista_ProductosActionPerformed
+      // Obtener la conexión a la base de datos
+   ConexionSQlServe conexion = new ConexionSQlServe();
+
+    try {
+        // Obtener la lista de nombres de productos desde la base de datos
+        ArrayList<String> nombresProductos = conexion.obtenerNombresProductos();
+
+        // Verificar si se obtuvieron nombres de productos
+        if (nombresProductos != null && !nombresProductos.isEmpty()) {
+            // Crear un modelo de ComboBox con los nombres de productos
+            DefaultComboBoxModel<String> modeloComboBox = new DefaultComboBoxModel<>(nombresProductos.toArray(new String[0]));
+
+            // Establecer el modelo en la lista de productos
+            Lista_Productos.setModel(modeloComboBox);
+        } else {
+            System.out.println("No se encontraron nombres de productos.");
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        // Cerrar la conexión
+        try {
+            conexion.cerrarConexion();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } 
+    }  
+    }//GEN-LAST:event_Lista_ProductosActionPerformed
+
+    private void txtStockDisponibleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStockDisponibleActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtStockDisponibleActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> Lista_Productos;
     private com.toedter.calendar.JDateChooser Midate;
     private javax.swing.JTable TableVenta;
     private javax.swing.JTextField TotalPagar;
@@ -712,4 +779,6 @@ private double calcularTotalAPagar() {
     // Limpiar la fecha seleccionada
     Midate.setDate(null);
     }
+
+    
 }
