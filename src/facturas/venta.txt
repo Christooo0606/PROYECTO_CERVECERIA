@@ -1,0 +1,4 @@
+RUC Cliente: 
+Nombre Cliente: 
+
+Detalles de la Venta:

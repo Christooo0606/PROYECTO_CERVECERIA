@@ -1,0 +1,9 @@
+Factura
+Fecha: 25-11-2023
+Datos Cliente:
+Nombre: Christian Jhair
+RFC: 1015245
+Detalle de la compra:
+14441	1441	114	0.0	0.0	
+4141	15	141	0.0	0.0	
+Total: 0.0

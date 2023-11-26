@@ -1,0 +1,13 @@
+Factura
+Fecha: 25-11-2023
+- - -Datos Cliente- - -
+
+Nombre: Juan Alvarez 
+RFC: Rovc'0203
+Detalle de la compra:
+ID	DESCRIPCIÓN	CANTIDAD	PRECIO U.	PRECIO TOTAL	
+10	Cerveza modelo 10 litros	10	0.0	0.0	
+1254	Carton de 12 pz	1	0.0	0.0	
+Total a pagar: 0.0
+IVA: 0.0
+Total a pagar con IVA: 0.0

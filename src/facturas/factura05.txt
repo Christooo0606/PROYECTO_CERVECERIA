@@ -1,0 +1,9 @@
+Factura
+Fecha: 25-11-2023
+Datos Cliente:
+Nombre: Karen la kk maquez 
+RFC: CR0ON3423
+Detalle de la compra:
+1215441	caguama	10	0.0	0.0	
+151658	Vaso 	10	0.0	0.0	
+Total: 0.0

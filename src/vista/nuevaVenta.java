@@ -12,8 +12,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import java.sql.Connection;
+import java.text.SimpleDateFormat;
+import javax.swing.table.DefaultTableModel;
 
 
 
@@ -58,13 +64,9 @@ public class nuevaVenta extends javax.swing.JPanel {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         txtRucVenta = new javax.swing.JTextField();
-        txtNombreClienteventa = new javax.swing.JTextField();
         btnGenerarVenta = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
-        LabelTotal = new javax.swing.JLabel();
-        txtIdCV = new javax.swing.JTextField();
-        txtIdPro = new javax.swing.JTextField();
-        btnGraficar = new javax.swing.JButton();
+        btnAgregar = new javax.swing.JButton();
         Midate = new com.toedter.calendar.JDateChooser();
         jLabel11 = new javax.swing.JLabel();
         jPanel14 = new javax.swing.JPanel();
@@ -75,6 +77,8 @@ public class nuevaVenta extends javax.swing.JPanel {
         jPanel23 = new javax.swing.JPanel();
         jPanel24 = new javax.swing.JPanel();
         jPanel25 = new javax.swing.JPanel();
+        txtNombreCliente = new javax.swing.JTextField();
+        TotalPagar = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -121,6 +125,11 @@ public class nuevaVenta extends javax.swing.JPanel {
 
         txtDescripcionVenta.setBackground(new java.awt.Color(204, 204, 204));
         txtDescripcionVenta.setBorder(null);
+        txtDescripcionVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDescripcionVentaActionPerformed(evt);
+            }
+        });
         txtDescripcionVenta.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtDescripcionVentaKeyTyped(evt);
@@ -130,6 +139,11 @@ public class nuevaVenta extends javax.swing.JPanel {
 
         txtCantidadVenta.setBackground(new java.awt.Color(204, 204, 204));
         txtCantidadVenta.setBorder(null);
+        txtCantidadVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCantidadVentaActionPerformed(evt);
+            }
+        });
         txtCantidadVenta.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtCantidadVentaKeyPressed(evt);
@@ -143,6 +157,11 @@ public class nuevaVenta extends javax.swing.JPanel {
         txtPrecioVenta.setEditable(false);
         txtPrecioVenta.setBackground(new java.awt.Color(204, 204, 204));
         txtPrecioVenta.setBorder(null);
+        txtPrecioVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPrecioVentaActionPerformed(evt);
+            }
+        });
         jPanel2.add(txtPrecioVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 70, 80, 30));
 
         txtStockDisponible.setEditable(false);
@@ -157,7 +176,15 @@ public class nuevaVenta extends javax.swing.JPanel {
             new String [] {
                 "ID", "DESCRIPCIÓN", "CANTIDAD", "PRECIO U.", "PRECIO TOTAL"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(TableVenta);
 
         jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 843, 191));
@@ -180,6 +207,11 @@ public class nuevaVenta extends javax.swing.JPanel {
 
         txtRucVenta.setBackground(new java.awt.Color(204, 204, 204));
         txtRucVenta.setBorder(null);
+        txtRucVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtRucVentaActionPerformed(evt);
+            }
+        });
         txtRucVenta.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtRucVentaKeyPressed(evt);
@@ -189,11 +221,6 @@ public class nuevaVenta extends javax.swing.JPanel {
             }
         });
         jPanel2.add(txtRucVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 375, 116, 30));
-
-        txtNombreClienteventa.setEditable(false);
-        txtNombreClienteventa.setBackground(new java.awt.Color(204, 204, 204));
-        txtNombreClienteventa.setBorder(null);
-        jPanel2.add(txtNombreClienteventa, new org.netbeans.lib.awtextra.AbsoluteConstraints(146, 375, 169, 30));
 
         btnGenerarVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/print.png"))); // NOI18N
         btnGenerarVenta.addActionListener(new java.awt.event.ActionListener() {
@@ -207,18 +234,16 @@ public class nuevaVenta extends javax.swing.JPanel {
         jLabel10.setText("Total a Pagar:");
         jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 377, -1, -1));
 
-        LabelTotal.setText("-----");
-        jPanel2.add(LabelTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(756, 381, -1, -1));
-        jPanel2.add(txtIdCV, new org.netbeans.lib.awtextra.AbsoluteConstraints(327, 375, -1, -1));
-        jPanel2.add(txtIdPro, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 110, -1, -1));
-
-        btnGraficar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/torta.png"))); // NOI18N
-        btnGraficar.addActionListener(new java.awt.event.ActionListener() {
+        btnAgregar.setBackground(new java.awt.Color(255, 255, 255));
+        btnAgregar.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
+        btnAgregar.setForeground(new java.awt.Color(51, 255, 0));
+        btnAgregar.setText("+");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGraficarActionPerformed(evt);
+                btnAgregarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnGraficar, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 60, -1, -1));
+        jPanel2.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 60, -1, -1));
 
         Midate.setBackground(new java.awt.Color(204, 204, 204));
         jPanel2.add(Midate, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 70, 210, 30));
@@ -346,6 +371,19 @@ public class nuevaVenta extends javax.swing.JPanel {
 
         jPanel2.add(jPanel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 405, 160, 2));
 
+        txtNombreCliente.setBackground(new java.awt.Color(255, 255, 255));
+        txtNombreCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNombreClienteActionPerformed(evt);
+            }
+        });
+        jPanel2.add(txtNombreCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 380, 160, -1));
+
+        TotalPagar.setBackground(new java.awt.Color(255, 255, 255));
+        TotalPagar.setForeground(new java.awt.Color(51, 255, 0));
+        TotalPagar.setText("- - - - ");
+        jPanel2.add(TotalPagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 380, 90, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -394,8 +432,22 @@ public class nuevaVenta extends javax.swing.JPanel {
     }//GEN-LAST:event_txtCantidadVentaKeyTyped
 
     private void btnEliminarventaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarventaActionPerformed
-        // TODO add your handling code here:
-       
+    int filaSeleccionada = TableVenta.getSelectedRow();
+
+    // Verificar si hay una fila seleccionada
+    if (filaSeleccionada != -1) {
+        // Eliminar la fila seleccionada
+        DefaultTableModel modelo = (DefaultTableModel) TableVenta.getModel();
+        modelo.removeRow(filaSeleccionada);
+
+        // Actualizar el total a pagar después de eliminar la fila
+        actualizarTotalAPagar();
+    } else {
+        JOptionPane.showMessageDialog(this, "Seleccione una fila para eliminar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+    }
+
+
+
     }//GEN-LAST:event_btnEliminarventaActionPerformed
 
     private void txtRucVentaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRucVentaKeyPressed
@@ -409,28 +461,219 @@ public class nuevaVenta extends javax.swing.JPanel {
     }//GEN-LAST:event_txtRucVentaKeyTyped
 
     private void btnGenerarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarVentaActionPerformed
-        // TODO add your handling code here:
-       
+        String datosTabla = obtenerDatosTabla();
+String ruc = txtRucVenta.getText();
+String nombreCliente = txtNombreCliente.getText();
+
+// Obtener nombres de las columnas
+String nombresColumnas = obtenerNombresColumnas();
+
+// Calcular el IVA
+double iva = (ruc != null && !ruc.isEmpty()) ? calcularIVA() : 0.0;
+
+// Calcular el total a pagar con IVA
+double totalAPagarConIVA = calcularTotalConIVA(iva);
+
+// Crear la factura
+String factura = crearFactura(nombresColumnas, datosTabla, ruc, nombreCliente, iva, totalAPagarConIVA);
+
+// Guardar la factura en un archivo txt
+boolean guardadoExitoso = guardarFacturaEnArchivo(factura);
+
+// Mostrar mensaje al usuario
+if (guardadoExitoso) {
+    JOptionPane.showMessageDialog(this, "Factura generada y guardada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+} else {
+    JOptionPane.showMessageDialog(this, "Hubo un error al generar o guardar la factura.", "Error", JOptionPane.ERROR_MESSAGE);
+}
+}
+
+private String obtenerNombresColumnas() {
+    // Obtener el modelo de la tabla
+    DefaultTableModel modelo = (DefaultTableModel) TableVenta.getModel();
+    
+    // Obtener nombres de las columnas
+    StringBuilder nombresColumnas = new StringBuilder();
+    for (int j = 0; j < modelo.getColumnCount(); j++) {
+        nombresColumnas.append(modelo.getColumnName(j)).append("\t");
+    }
+    nombresColumnas.append("\n");
+
+    return nombresColumnas.toString();
+}
+
+private String obtenerDatosTabla() {
+    DefaultTableModel modelo = (DefaultTableModel) TableVenta.getModel();
+    StringBuilder datosTabla = new StringBuilder();
+
+    for (int i = 0; i < modelo.getRowCount(); i++) {
+        for (int j = 0; j < modelo.getColumnCount(); j++) {
+            datosTabla.append(modelo.getValueAt(i, j)).append("\t");
+        }
+        datosTabla.append("\n");
+    }
+
+    return datosTabla.toString();
+}
+
+private double calcularIVA() {
+    // Lógica para calcular el IVA
+    // Retorna el monto del IVA
+    return 0.0; // Cambia esto con la lógica real de cálculo del IVA
+}
+
+private String crearFactura(String nombresColumnas, String datosTabla, String ruc, String nombreCliente, double iva, double totalAPagarConIVA) {
+    SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MM-yyyy");
+    String fechaActual = formatoFecha.format(new Date());
+
+    int longitudLinea = 45; // Longitud total de la línea para centrar
+
+    StringBuilder facturaBuilder = new StringBuilder();
+    facturaBuilder.append("*****************************************\n");
+    facturaBuilder.append("************** Factura ******************\n");
+    facturaBuilder.append("*****************************************\n");
+    facturaBuilder.append("Fecha: ").append(centrarTexto(fechaActual, longitudLinea)).append("\n");
+    facturaBuilder.append("*****************************************\n");
+    facturaBuilder.append("- - - Datos Cliente - - -\n");
+    facturaBuilder.append("Nombre: ").append(centrarTexto(nombreCliente, longitudLinea)).append("\n");
+    facturaBuilder.append("RFC: ").append(centrarTexto(ruc, longitudLinea)).append("\n");
+    facturaBuilder.append("*****************************************\n");
+    facturaBuilder.append("- - - Detalle de la compra - - - \n");
+    facturaBuilder.append(nombresColumnas); // Agrega los nombres de las columnas sin centrar
+    facturaBuilder.append("*****************************************\n");
+    facturaBuilder.append(datosTabla);
+    facturaBuilder.append("*****************************************\n");
+    facturaBuilder.append("Total a pagar: ").append(centrarTexto(String.valueOf(calcularTotalAPagar()), longitudLinea)).append("\n");
+    facturaBuilder.append("IVA: ").append(centrarTexto(String.valueOf(iva), longitudLinea)).append("\n");
+    facturaBuilder.append("Total a pagar con IVA: ").append(centrarTexto(String.valueOf(totalAPagarConIVA), longitudLinea)).append("\n");
+    facturaBuilder.append("*****************************************\n");
+
+    return facturaBuilder.toString();
+}
+
+private String centrarTexto(String texto, int longitudLinea) {
+    int espacios = (longitudLinea - texto.length()) / 2;
+    return " ".repeat(Math.max(0, espacios)) + texto + " ".repeat(Math.max(0, espacios));
+}
+
+private boolean guardarFacturaEnArchivo(String factura) {
+    try {
+        String rutaProyecto = System.getProperty("user.dir");
+        String nombreArchivo = obtenerNombreFactura();
+        String rutaCompleta = rutaProyecto + "\\src\\facturas\\" + nombreArchivo + ".txt";
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(rutaCompleta))) {
+            writer.write(factura);
+            System.out.println("Factura guardada correctamente en el archivo " + rutaCompleta);
+            return true;
+        }
+    } catch (IOException e) {
+        System.err.println("Error al guardar la factura en el archivo: " + e.getMessage());
+        return false;
+    }
+    }
+
+    private String obtenerNombreFactura() {
+        int cantidadFacturas = new File(System.getProperty("user.dir") + "\\src\\facturas").listFiles().length;
+        return "factura" + String.format("%02d", cantidadFacturas + 1);
+    }
+
+    private double calcularTotalConIVA(double iva) {
+        DefaultTableModel modelo = (DefaultTableModel) TableVenta.getModel();
+        double total = 0.0;
+
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            total += Double.parseDouble(modelo.getValueAt(i, 4).toString());
+        }
+
+        return total + iva;
+    
+
     }//GEN-LAST:event_btnGenerarVentaActionPerformed
 
-    private void btnGraficarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGraficarActionPerformed
-        // TODO add your handling code here:
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+       String codigo = txtCodigoVenta.getText();
+    String descripcion = txtDescripcionVenta.getText();
 
-       
-    }//GEN-LAST:event_btnGraficarActionPerformed
+    // Verificar si el campo txtCantidadVenta es un número válido
+    try {
+        int cantidad = Integer.parseInt(txtCantidadVenta.getText());
+
+        // Obtener el precio del campo txtPrecioVenta, si está vacío, establecerlo en 0
+        double precio = 0;
+        if (!txtPrecioVenta.getText().isEmpty()) {
+            precio = Double.parseDouble(txtPrecioVenta.getText());
+        }
+
+        // Calcular el precio total
+        double precioTotal = cantidad * precio;
+
+        // Agregar los datos a la tabla
+        DefaultTableModel modelo = (DefaultTableModel) TableVenta.getModel();
+        modelo.addRow(new Object[]{codigo, descripcion, cantidad, precio, precioTotal});
+
+        // Limpiar los campos después de agregar a la tabla
+        limpiarCampos();
+
+        // Actualizar y mostrar el total a pagar
+        actualizarTotalAPagar();
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Ingrese una cantidad válida.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+private void actualizarTotalAPagar() {
+    // Calcular el total a pagar en función de los datos en la tabla
+    double totalAPagar = calcularTotalAPagar();
+
+    // Mostrar el total a pagar en el componente TotalPagar
+    TotalPagar.setText( "$" + String.valueOf(totalAPagar));
+}
+
+private double calcularTotalAPagar() {
+    DefaultTableModel modelo = (DefaultTableModel) TableVenta.getModel();
+    double total = 0.0;
+
+    for (int i = 0; i < modelo.getRowCount(); i++) {
+        total += Double.parseDouble(modelo.getValueAt(i, 4).toString());
+    }
+
+    return total;
+
+    }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void txtCodigoVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoVentaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCodigoVentaActionPerformed
 
+    private void txtPrecioVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecioVentaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrecioVentaActionPerformed
+
+    private void txtDescripcionVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescripcionVentaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDescripcionVentaActionPerformed
+
+    private void txtCantidadVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadVentaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCantidadVentaActionPerformed
+
+    private void txtRucVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRucVentaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtRucVentaActionPerformed
+
+    private void txtNombreClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreClienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombreClienteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel LabelTotal;
     private com.toedter.calendar.JDateChooser Midate;
     private javax.swing.JTable TableVenta;
+    private javax.swing.JTextField TotalPagar;
+    private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnEliminarventa;
     private javax.swing.JButton btnGenerarVenta;
-    private javax.swing.JButton btnGraficar;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel3;
@@ -453,11 +696,20 @@ public class nuevaVenta extends javax.swing.JPanel {
     private javax.swing.JTextField txtCantidadVenta;
     private javax.swing.JTextField txtCodigoVenta;
     private javax.swing.JTextField txtDescripcionVenta;
-    private javax.swing.JTextField txtIdCV;
-    private javax.swing.JTextField txtIdPro;
-    private javax.swing.JTextField txtNombreClienteventa;
+    private javax.swing.JTextField txtNombreCliente;
     private javax.swing.JTextField txtPrecioVenta;
     private javax.swing.JTextField txtRucVenta;
     private javax.swing.JTextField txtStockDisponible;
     // End of variables declaration//GEN-END:variables
+
+    private void limpiarCampos() {
+       txtCodigoVenta.setText("");
+    txtDescripcionVenta.setText("");
+    txtCantidadVenta.setText("");
+    txtPrecioVenta.setText("");
+    txtStockDisponible.setText("");
+
+    // Limpiar la fecha seleccionada
+    Midate.setDate(null);
+    }
 }

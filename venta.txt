@@ -1,0 +1,5 @@
+RUC Cliente: 242
+Nombre Cliente: 
+
+Detalles de la Venta:
+424 242 242 0.0 0.0 

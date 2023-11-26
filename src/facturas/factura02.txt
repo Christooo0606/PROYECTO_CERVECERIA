@@ -1,0 +1,10 @@
+Factura
+Fecha: 25-11-2023
+Datos Cliente:
+Nombre: miguwlito
+RFC: 335323213
+Detalle de la compra:
+123	132121	10	0.0	0.0	
+1232	32132	122	0.0	0.0	
+123	2312	213	0.0	0.0	
+Total: 0.0

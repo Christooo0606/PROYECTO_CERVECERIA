@@ -1,0 +1,10 @@
+Factura
+Fecha: 25-11-2023
+Datos Cliente:
+Nombre: Jose Luis
+RFC: 2001
+Detalle de la compra:
+10	1214	10	0.0	0.0	
+10	10	10	0.0	0.0	
+200	1021	101	0.0	0.0	
+Total: 0.0

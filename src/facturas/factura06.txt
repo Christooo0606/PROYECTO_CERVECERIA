@@ -1,0 +1,13 @@
+Factura
+Fecha: 25-11-2023
+Datos Cliente:
+Nombre: jhgjbnvbnhj
+RFC: hjfgj45245
+Detalle de la compra:
+ID	DESCRIPCIÓN	CANTIDAD	PRECIO U.	PRECIO TOTAL	
+221	2121	21	0.0	0.0	
+212	po´{´klñ	45	0.0	0.0	
+6545	lkjkl	45	0.0	0.0	
+Total a pagar: 0.0
+IVA: 0.0
+Total a pagar con IVA: 0.0

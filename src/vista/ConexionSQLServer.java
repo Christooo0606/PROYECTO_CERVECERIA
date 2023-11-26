@@ -2,17 +2,17 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class conexion {
+public class ConexionSQLServer {
     // Cambia estos valores según tu configuración
-    private static final String URL = "jdbc:mysql://localhost:3306/cicm";
-    private static final String USUARIO = "root";
-    private static final String CONTRASENA = "";
+    private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=GrupoModelo";
+    private static final String USUARIO = "usersql";
+    private static final String CONTRASENA = "root";
 
     public static Connection obtenerConexion() {
         Connection conexion = null;
         try {
-            // Cargar el controlador JDBC
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            // Cargar el controlador JDBC para SQL Server
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
             // Establecer la conexión
             conexion = DriverManager.getConnection(URL, USUARIO, CONTRASENA);
