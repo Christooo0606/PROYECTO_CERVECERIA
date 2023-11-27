@@ -4,22 +4,28 @@
  */
 package vista;
 
-
-import java.util.Date;
-import javax.swing.JOptionPane;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import javax.swing.DefaultComboBoxModel;
-import java.sql.Connection;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
 import vista.ConexionSQlServe;
+import vista.Producto;
+
+
 
 /**
  *
@@ -50,7 +56,7 @@ public class nuevaVenta extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        txtCodigoVenta = new javax.swing.JTextField();
+        ID_producto = new javax.swing.JTextField();
         txtDescripcionVenta = new javax.swing.JTextField();
         txtCantidadVenta = new javax.swing.JTextField();
         txtPrecioVenta = new javax.swing.JTextField();
@@ -60,7 +66,7 @@ public class nuevaVenta extends javax.swing.JPanel {
         btnEliminarventa = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        txtRucVenta = new javax.swing.JTextField();
+        txtRFC = new javax.swing.JTextField();
         btnGenerarVenta = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         btnAgregar = new javax.swing.JButton();
@@ -104,22 +110,22 @@ public class nuevaVenta extends javax.swing.JPanel {
         jLabel7.setText("Stock Disponible");
         jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
 
-        txtCodigoVenta.setBackground(new java.awt.Color(204, 204, 204));
-        txtCodigoVenta.setBorder(null);
-        txtCodigoVenta.addActionListener(new java.awt.event.ActionListener() {
+        ID_producto.setBackground(new java.awt.Color(204, 204, 204));
+        ID_producto.setBorder(null);
+        ID_producto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodigoVentaActionPerformed(evt);
+                ID_productoActionPerformed(evt);
             }
         });
-        txtCodigoVenta.addKeyListener(new java.awt.event.KeyAdapter() {
+        ID_producto.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtCodigoVentaKeyPressed(evt);
+                ID_productoKeyPressed(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtCodigoVentaKeyTyped(evt);
+                ID_productoKeyTyped(evt);
             }
         });
-        jPanel2.add(txtCodigoVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 70, 102, 30));
+        jPanel2.add(ID_producto, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 70, 102, 30));
 
         txtDescripcionVenta.setBackground(new java.awt.Color(204, 204, 204));
         txtDescripcionVenta.setBorder(null);
@@ -208,22 +214,22 @@ public class nuevaVenta extends javax.swing.JPanel {
         jLabel9.setText("Nombre:");
         jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(146, 352, -1, -1));
 
-        txtRucVenta.setBackground(new java.awt.Color(204, 204, 204));
-        txtRucVenta.setBorder(null);
-        txtRucVenta.addActionListener(new java.awt.event.ActionListener() {
+        txtRFC.setBackground(new java.awt.Color(204, 204, 204));
+        txtRFC.setBorder(null);
+        txtRFC.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtRucVentaActionPerformed(evt);
+                txtRFCActionPerformed(evt);
             }
         });
-        txtRucVenta.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtRFC.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtRucVentaKeyPressed(evt);
+                txtRFCKeyPressed(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtRucVentaKeyTyped(evt);
+                txtRFCKeyTyped(evt);
             }
         });
-        jPanel2.add(txtRucVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 375, 116, 30));
+        jPanel2.add(txtRFC, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 375, 116, 30));
 
         btnGenerarVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/print.png"))); // NOI18N
         btnGenerarVenta.addActionListener(new java.awt.event.ActionListener() {
@@ -387,7 +393,7 @@ public class nuevaVenta extends javax.swing.JPanel {
         TotalPagar.setText("- - - - ");
         jPanel2.add(TotalPagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 380, 90, -1));
 
-        Lista_Productos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        Lista_Productos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "mostrar" }));
         Lista_Productos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Lista_ProductosActionPerformed(evt);
@@ -420,15 +426,15 @@ public class nuevaVenta extends javax.swing.JPanel {
     
     
     
-    private void txtCodigoVentaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoVentaKeyPressed
+    private void ID_productoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ID_productoKeyPressed
         // TODO add your handling code here:
       
-    }//GEN-LAST:event_txtCodigoVentaKeyPressed
+    }//GEN-LAST:event_ID_productoKeyPressed
 
-    private void txtCodigoVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoVentaKeyTyped
+    private void ID_productoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ID_productoKeyTyped
         // TODO add your handling code here:
         
-    }//GEN-LAST:event_txtCodigoVentaKeyTyped
+    }//GEN-LAST:event_ID_productoKeyTyped
 
     private void txtDescripcionVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcionVentaKeyTyped
         // TODO add your handling code here:
@@ -482,19 +488,19 @@ public class nuevaVenta extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnEliminarventaActionPerformed
 
-    private void txtRucVentaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRucVentaKeyPressed
+    private void txtRFCKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRFCKeyPressed
         // TODO add your handling code here:
       
         
-    }//GEN-LAST:event_txtRucVentaKeyPressed
+    }//GEN-LAST:event_txtRFCKeyPressed
 
-    private void txtRucVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRucVentaKeyTyped
+    private void txtRFCKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRFCKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtRucVentaKeyTyped
+    }//GEN-LAST:event_txtRFCKeyTyped
 
     private void btnGenerarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarVentaActionPerformed
         String datosTabla = obtenerDatosTabla();
-String ruc = txtRucVenta.getText();
+String ruc = txtRFC.getText();
 String nombreCliente = txtNombreCliente.getText();
 
 // Obtener nombres de las columnas
@@ -624,7 +630,7 @@ private boolean guardarFacturaEnArchivo(String factura) {
     }//GEN-LAST:event_btnGenerarVentaActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-       String codigo = txtCodigoVenta.getText();
+       String codigo = ID_producto.getText();
     String descripcion = txtDescripcionVenta.getText();
 
     // Verificar si el campo txtCantidadVenta es un número válido
@@ -674,9 +680,9 @@ private double calcularTotalAPagar() {
 
     }//GEN-LAST:event_btnAgregarActionPerformed
 
-    private void txtCodigoVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoVentaActionPerformed
+    private void ID_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ID_productoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCodigoVentaActionPerformed
+    }//GEN-LAST:event_ID_productoActionPerformed
 
     private void txtPrecioVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecioVentaActionPerformed
         // TODO add your handling code here:
@@ -690,50 +696,80 @@ private double calcularTotalAPagar() {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCantidadVentaActionPerformed
 
-    private void txtRucVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRucVentaActionPerformed
+    private void txtRFCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRFCActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtRucVentaActionPerformed
+    }//GEN-LAST:event_txtRFCActionPerformed
 
     private void txtNombreClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreClienteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreClienteActionPerformed
 
+    public void actionPerformed(java.awt.event.ActionEvent evt) {
+       
+        } 
+    
+   
+    
     private void Lista_ProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Lista_ProductosActionPerformed
-      // Obtener la conexión a la base de datos
-   ConexionSQlServe conexion = new ConexionSQlServe();
+       List<String> nombresProductos = new ArrayList<>();
 
     try {
-        // Obtener la lista de nombres de productos desde la base de datos
-        ArrayList<String> nombresProductos = conexion.obtenerNombresProductos();
+        // Establecer la conexión
+        Connection conexion = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=GrupoModelo", "usersql", "root");
 
-        // Verificar si se obtuvieron nombres de productos
-        if (nombresProductos != null && !nombresProductos.isEmpty()) {
-            // Crear un modelo de ComboBox con los nombres de productos
-            DefaultComboBoxModel<String> modeloComboBox = new DefaultComboBoxModel<>(nombresProductos.toArray(new String[0]));
+        // Consulta SQL para obtener los nombres de la tabla "Productos"
+        String sql = "SELECT Nombre FROM Productos";
 
-            // Establecer el modelo en la lista de productos
-            Lista_Productos.setModel(modeloComboBox);
-        } else {
-            System.out.println("No se encontraron nombres de productos.");
+        // Crear una declaración preparada
+        PreparedStatement statement = conexion.prepareStatement(sql);
+
+        // Ejecutar la consulta y obtener resultados
+        ResultSet resultSet = statement.executeQuery();
+
+        // Procesar los resultados
+        while (resultSet.next()) {
+            String nombreProducto = resultSet.getString("Nombre");
+            nombresProductos.add(nombreProducto);
         }
-    } catch (Exception e) {
+
+        // Imprimir la lista para verificar si se están obteniendo los nombres
+        System.out.println("Nombres de productos: " + nombresProductos);
+
+        // Cerrar recursos
+        resultSet.close();
+        statement.close();
+        conexion.close();
+
+    } catch (SQLException e) {
         e.printStackTrace();
-    } finally {
-        // Cerrar la conexión
-        try {
-            conexion.cerrarConexion();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } 
-    }  
+    }
+
+    // Verificar si el JComboBox está configurado correctamente
+    if (!nombresProductos.isEmpty()) {
+        // Limpiar el modelo del JComboBox
+        Lista_Productos.removeAllItems();
+
+        // Agregar los nombres al JComboBox
+        for (String nombreProducto : nombresProductos) {
+            Lista_Productos.addItem(nombreProducto);
+        }
+
+        // Imprimir un mensaje para verificar si se están agregando los elementos al JComboBox
+        System.out.println("Elementos agregados al JComboBox");
+    } else {
+        System.out.println("No se encontraron nombres de productos.");
+    }
+       
+    
     }//GEN-LAST:event_Lista_ProductosActionPerformed
 
     private void txtStockDisponibleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStockDisponibleActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_txtStockDisponibleActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField ID_producto;
     private javax.swing.JComboBox<String> Lista_Productos;
     private com.toedter.calendar.JDateChooser Midate;
     private javax.swing.JTable TableVenta;
@@ -761,24 +797,33 @@ private double calcularTotalAPagar() {
     private javax.swing.JPanel jPanel25;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField txtCantidadVenta;
-    private javax.swing.JTextField txtCodigoVenta;
     private javax.swing.JTextField txtDescripcionVenta;
     private javax.swing.JTextField txtNombreCliente;
     private javax.swing.JTextField txtPrecioVenta;
-    private javax.swing.JTextField txtRucVenta;
+    private javax.swing.JTextField txtRFC;
     private javax.swing.JTextField txtStockDisponible;
     // End of variables declaration//GEN-END:variables
 
     private void limpiarCampos() {
-       txtCodigoVenta.setText("");
-    txtDescripcionVenta.setText("");
-    txtCantidadVenta.setText("");
-    txtPrecioVenta.setText("");
-    txtStockDisponible.setText("");
-
-    // Limpiar la fecha seleccionada
-    Midate.setDate(null);
+        ID_producto.setText("");
+        txtDescripcionVenta.setText("");
+        txtCantidadVenta.setText("");
+        txtRFC.setText("");
+        txtNombreCliente.setText("");
     }
 
-    
+ 
+  
 }
+
+
+    
+
+    
+
+   
+  
+    
+ 
+    
+

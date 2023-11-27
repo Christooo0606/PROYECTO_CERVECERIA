@@ -1,5 +1,6 @@
 package vista;
 
+import java.beans.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -61,10 +62,118 @@ public class ConexionSQlServe {
         } catch (SQLException e) {
             // Manejar la excepción, por ejemplo, imprimir el error
             e.printStackTrace();
-        } finally {
-            cerrarConexion();  // Asegurarse de cerrar la conexión
         }
+
+        // No cerrar la conexión aquí, se cerrará explícitamente cuando sea necesario
 
         return nombresProductos;
     }
+    
+    
+    public Producto obtenerDetallesProducto(String nombreProducto) {
+    Producto producto = null;
+
+    try {
+        // Establecer la conexión
+        Connection conexion = obtenerConexion();
+
+        // Consulta SQL para obtener detalles del producto por nombre
+        String sql = "SELECT * FROM Productos WHERE Nombre = ?";
+
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setString(1, nombreProducto);
+            ResultSet rs = stmt.executeQuery();
+
+            // Verificar si se encontró un producto
+            if (rs.next()) {
+                // Crear un objeto Producto con los detalles obtenidos de la base de datos
+                producto = new Producto(
+                    rs.getInt("ID"),
+                    rs.getString("Nombre"),
+                    rs.getString("Descripcion"),
+                    rs.getDouble("Precio"),
+                    rs.getInt("Cantidad_Stock"),
+                    rs.getString("Categoria")
+                );
+            }
+        }
+    } catch (SQLException e) {
+        // Manejar la excepción, por ejemplo, imprimir el error
+        e.printStackTrace();
+    }
+
+    return producto;
+}
+
+    public void guardarDatos(String nombre, String descripcion, String cantidad, String precio, String categoria) {
+    try {
+        // Establecer la conexión
+        Connection conexion = obtenerConexion();
+
+        // Consulta SQL para insertar un nuevo producto
+        String sql = "INSERT INTO Productos (Nombre, Descripcion, Precio, Cantidad_Stock, Categoria) VALUES (?, ?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setString(1, nombre);
+            stmt.setString(2, descripcion);
+            stmt.setDouble(3, Double.parseDouble(precio));
+            stmt.setInt(4, Integer.parseInt(cantidad));
+            stmt.setString(5, categoria);
+
+            // Ejecutar la consulta
+            stmt.executeUpdate();
+        }
+    } catch (SQLException e) {
+        // Manejar la excepción, por ejemplo, imprimir el error
+        e.printStackTrace();
+    }
+}
+
+public ArrayList<Producto> obtenerTodosProductos() {
+    ArrayList<Producto> productos = new ArrayList<>();
+
+    try {
+        // Establecer la conexión
+        Connection conexion = obtenerConexion();
+
+        // Consulta SQL para obtener todos los productos
+        String sql = "SELECT * FROM Productos";
+
+        try (PreparedStatement stmt = conexion.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            // Iterar a través de los resultados y agregar productos a la lista
+            while (rs.next()) {
+                Producto producto = new Producto(
+                        rs.getInt("Id_producto"),
+                        rs.getString("Nombre"),
+                        rs.getString("Descripcion"),
+                        rs.getDouble("Precio"),
+                        rs.getInt("cantidad_stock"),
+                        rs.getString("categoria")
+                );
+                productos.add(producto);
+            }
+        }
+    } catch (SQLException e) {
+        // Manejar la excepción, por ejemplo, imprimir el error
+        e.printStackTrace();
+    }
+
+    return productos;
+}
+
+    void guardarDatos(String idProducto, String nombreProducto, String descripcionProducto, String cantidadProducto, String precioProducto, String categoriaProducto) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    Statement createStatement() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    void close() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+   
 }

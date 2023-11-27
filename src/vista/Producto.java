@@ -1,9 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package vista;
-
+import java.sql.Connection;
 public class Producto {
     private int idProducto;
     private String nombre;
@@ -20,6 +16,10 @@ public class Producto {
         this.precio = precio;
         this.cantidadStock = cantidadStock;
         this.categoria = categoria;
+    }
+
+    Producto(int idProducto, String nombreProducto, String descripcion, double precio, int cantidadStock) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     // Getters
@@ -45,5 +45,24 @@ public class Producto {
 
     public String getCategoria() {
         return categoria;
+    }
+
+    // Setter para establecer el ID del producto
+    public void setIdProducto(int idProducto) {
+        this.idProducto = idProducto;
+    }
+
+    // Método para obtener el código
+    public String getCodigo() {
+        return nombre;  // Puedes cambiar la lógica según sea necesario
+    }
+
+    // Método para obtener el ID
+    public String getID() {
+        return Integer.toString(idProducto);
+    }
+
+    boolean isEmpty() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
