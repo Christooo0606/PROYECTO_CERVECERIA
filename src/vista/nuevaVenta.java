@@ -4,6 +4,8 @@
  */
 package vista;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -17,11 +19,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import vista.productoDAO;
+
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-
+import vista.Producto;
 import vista.ConexionSQlServe;
 import vista.Producto;
 
@@ -83,6 +89,7 @@ public class nuevaVenta extends javax.swing.JPanel {
         txtNombreCliente = new javax.swing.JTextField();
         TotalPagar = new javax.swing.JTextField();
         Lista_Productos = new javax.swing.JComboBox<>();
+        LIMPIAR_TODO = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -391,15 +398,30 @@ public class nuevaVenta extends javax.swing.JPanel {
         TotalPagar.setBackground(new java.awt.Color(255, 255, 255));
         TotalPagar.setForeground(new java.awt.Color(51, 255, 0));
         TotalPagar.setText("- - - - ");
+        TotalPagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TotalPagarActionPerformed(evt);
+            }
+        });
         jPanel2.add(TotalPagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 380, 90, -1));
 
-        Lista_Productos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "mostrar" }));
+        Lista_Productos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         Lista_Productos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Lista_ProductosActionPerformed(evt);
             }
         });
-        jPanel2.add(Lista_Productos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 100, -1));
+        jPanel2.add(Lista_Productos, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 120, -1));
+
+        LIMPIAR_TODO.setBackground(new java.awt.Color(51, 255, 0));
+        LIMPIAR_TODO.setForeground(new java.awt.Color(255, 255, 255));
+        LIMPIAR_TODO.setText("FINALIZAR");
+        LIMPIAR_TODO.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LIMPIAR_TODOActionPerformed(evt);
+            }
+        });
+        jPanel2.add(LIMPIAR_TODO, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 110, 90, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -499,59 +521,67 @@ public class nuevaVenta extends javax.swing.JPanel {
     }//GEN-LAST:event_txtRFCKeyTyped
 
     private void btnGenerarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarVentaActionPerformed
-        String datosTabla = obtenerDatosTabla();
-String ruc = txtRFC.getText();
-String nombreCliente = txtNombreCliente.getText();
+        // Obtener el modelo de la tabla
+DefaultTableModel modeloTabla = (DefaultTableModel) TableVenta.getModel();
 
-// Obtener nombres de las columnas
-String nombresColumnas = obtenerNombresColumnas();
+// Verificar si hay filas en la tabla
+int filas = modeloTabla.getRowCount();
 
-// Calcular el IVA
-double iva = (ruc != null && !ruc.isEmpty()) ? calcularIVA() : 0.0;
+// Crear un mensaje con la información de los datos en la tabla
+StringBuilder mensajeDatosTabla = new StringBuilder("Datos en la tabla:\n");
 
-// Calcular el total a pagar con IVA
-double totalAPagarConIVA = calcularTotalConIVA(iva);
+// Obtener la cantidad de columnas en la tabla
+int columnas = TableVenta.getColumnCount();
 
-// Crear la factura
-String factura = crearFactura(nombresColumnas, datosTabla, ruc, nombreCliente, iva, totalAPagarConIVA);
-
-// Guardar la factura en un archivo txt
-boolean guardadoExitoso = guardarFacturaEnArchivo(factura);
-
-// Mostrar mensaje al usuario
-if (guardadoExitoso) {
-    JOptionPane.showMessageDialog(this, "Factura generada y guardada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-} else {
-    JOptionPane.showMessageDialog(this, "Hubo un error al generar o guardar la factura.", "Error", JOptionPane.ERROR_MESSAGE);
-}
-}
-
-private String obtenerNombresColumnas() {
-    // Obtener el modelo de la tabla
-    DefaultTableModel modelo = (DefaultTableModel) TableVenta.getModel();
-    
-    // Obtener nombres de las columnas
-    StringBuilder nombresColumnas = new StringBuilder();
-    for (int j = 0; j < modelo.getColumnCount(); j++) {
-        nombresColumnas.append(modelo.getColumnName(j)).append("\t");
-    }
-    nombresColumnas.append("\n");
-
-    return nombresColumnas.toString();
-}
-
-private String obtenerDatosTabla() {
-    DefaultTableModel modelo = (DefaultTableModel) TableVenta.getModel();
-    StringBuilder datosTabla = new StringBuilder();
-
-    for (int i = 0; i < modelo.getRowCount(); i++) {
-        for (int j = 0; j < modelo.getColumnCount(); j++) {
-            datosTabla.append(modelo.getValueAt(i, j)).append("\t");
+for (int i = 0; i < filas; i++) {
+    for (int j = 0; j < columnas; j++) {
+        Object valorCelda = TableVenta.getValueAt(i, j);
+        // Asumiendo que la primera columna contiene algún identificador único
+        if (j == 0) {
+            mensajeDatosTabla.append("ID: ");
         }
-        datosTabla.append("\n");
+        mensajeDatosTabla.append(TableVenta.getColumnName(j)).append(": ").append(valorCelda).append("  ");
     }
+    mensajeDatosTabla.append("\n");
+}
 
-    return datosTabla.toString();
+// Imprimir datos de la tabla
+System.out.println(mensajeDatosTabla.toString());
+
+// Obtener datos de txtRFC, txtNombreCliente y TotalPagar
+String rfc = txtRFC.getText();
+String nombreCliente = txtNombreCliente.getText();
+String totalPagar = TotalPagar.getText();
+
+// Imprimir datos de txtRFC, txtNombreCliente y TotalPagar
+System.out.println("RFC: " + rfc);
+System.out.println("Nombre: " + nombreCliente);
+System.out.println("Total a pagar: " + totalPagar);
+
+// Mostrar un mensaje de confirmación
+int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea finalizar la compra?\n\n" + mensajeDatosTabla.toString(), "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+// Verificar la respuesta del usuario
+if (confirmacion == JOptionPane.YES_OPTION) {
+    // Limpiar todos los datos del modelo
+    modeloTabla.setRowCount(0);
+
+    // Reiniciar el campo TotalPagar
+    TotalPagar.setText("- - - -");
+
+    // Limpiar otros campos
+    txtRFC.setText("");
+    txtNombreCliente.setText("");
+
+    // Actualizar la interfaz gráfica
+    TableVenta.updateUI();
+
+    // Mostrar mensaje de éxito
+    JOptionPane.showMessageDialog(this, "Compra finalizada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+} else {
+    // No hay datos en la tabla
+    JOptionPane.showMessageDialog(this, "No hay datos en la tabla.", "Información", JOptionPane.INFORMATION_MESSAGE);
+}
 }
 
 private double calcularIVA() {
@@ -710,66 +740,146 @@ private double calcularTotalAPagar() {
     
    
     
-    private void Lista_ProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Lista_ProductosActionPerformed
-       List<String> nombresProductos = new ArrayList<>();
-
-    try {
-        // Establecer la conexión
-        Connection conexion = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=GrupoModelo", "usersql", "root");
-
-        // Consulta SQL para obtener los nombres de la tabla "Productos"
-        String sql = "SELECT Nombre FROM Productos";
-
-        // Crear una declaración preparada
-        PreparedStatement statement = conexion.prepareStatement(sql);
-
-        // Ejecutar la consulta y obtener resultados
-        ResultSet resultSet = statement.executeQuery();
-
-        // Procesar los resultados
-        while (resultSet.next()) {
-            String nombreProducto = resultSet.getString("Nombre");
-            nombresProductos.add(nombreProducto);
-        }
-
-        // Imprimir la lista para verificar si se están obteniendo los nombres
-        System.out.println("Nombres de productos: " + nombresProductos);
-
-        // Cerrar recursos
-        resultSet.close();
-        statement.close();
-        conexion.close();
-
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-
-    // Verificar si el JComboBox está configurado correctamente
-    if (!nombresProductos.isEmpty()) {
-        // Limpiar el modelo del JComboBox
-        Lista_Productos.removeAllItems();
-
-        // Agregar los nombres al JComboBox
-        for (String nombreProducto : nombresProductos) {
-            Lista_Productos.addItem(nombreProducto);
-        }
-
-        // Imprimir un mensaje para verificar si se están agregando los elementos al JComboBox
-        System.out.println("Elementos agregados al JComboBox");
-    } else {
-        System.out.println("No se encontraron nombres de productos.");
-    }
-       
-    
-    }//GEN-LAST:event_Lista_ProductosActionPerformed
-
     private void txtStockDisponibleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStockDisponibleActionPerformed
 
     }//GEN-LAST:event_txtStockDisponibleActionPerformed
 
+    private void Lista_ProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Lista_ProductosActionPerformed
+ try {
+    // Establecer la conexión a la base de datos
+    Connection conexion = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=GrupoModelo","usersql", "root");
+
+    // Obtener la lista de nombres de productos desde el productoDAO
+    List<String> nombresProductos = productoDAO.obtenerNombresProductos();
+
+    // Verificar si la lista de productos no está vacía
+    if (!nombresProductos.isEmpty()) {
+        // Actualizar el modelo del JComboBox con los nombres de productos
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(nombresProductos.toArray(new String[0]));
+        Lista_Productos.setModel(model);
+
+        // Agregar un listener para manejar el evento de cambio en el JComboBox
+        Lista_Productos.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Obtener el índice del producto seleccionado en el JComboBox
+                int indiceSeleccionado = Lista_Productos.getSelectedIndex();
+
+                // Verificar si se seleccionó un ítem válido
+                if (indiceSeleccionado >= 0 && indiceSeleccionado < nombresProductos.size()) {
+                    // Obtener el nombre del producto seleccionado
+                    String nombreProductoSeleccionado = nombresProductos.get(indiceSeleccionado);
+
+                    try {
+                        // Obtener el producto completo desde la base de datos usando el nombre
+                        Producto productoSeleccionado = productoDAO.obtenerProductoPorNombre(nombreProductoSeleccionado);
+
+                        // Autocompletar los campos con los datos del producto
+                        ID_producto.setText(String.valueOf(productoSeleccionado.getIdProducto()));
+                        txtDescripcionVenta.setText(productoSeleccionado.getDescripcion());
+                        txtPrecioVenta.setText(String.valueOf(productoSeleccionado.getPrecio()));
+                        txtStockDisponible.setText(String.valueOf(productoSeleccionado.getCantidadStock()));
+                    } catch (SQLException ex) {
+                        // Manejar la excepción específica (puedes mostrar un mensaje de error, registrar, etc.)
+                        ex.printStackTrace();
+                    }
+                } else {
+                    System.out.println("No se seleccionó un producto válido.");
+                }
+            }
+        });
+    } else {
+        System.out.println("No se encontraron productos."); 
+
+        // Si deseas mostrar todos los productos al cargar, puedes eliminar el ActionListener y obtener la información del primer producto.
+        // Aquí hay un ejemplo de cómo hacerlo:
+        // Si la lista de productos no está vacía, obtener el primer nombre de producto
+        if (!nombresProductos.isEmpty()) {
+            String primerNombreProducto = nombresProductos.get(0);
+
+            // Obtener el producto completo desde la base de datos usando el nombre
+            Producto primerProducto = productoDAO.obtenerProductoPorNombre(primerNombreProducto);
+
+            // Autocompletar los campos con los datos del primer producto
+            ID_producto.setText(String.valueOf(primerProducto.getIdProducto()));
+            txtDescripcionVenta.setText(primerProducto.getDescripcion());
+            txtPrecioVenta.setText(String.valueOf(primerProducto.getPrecio()));
+            txtStockDisponible.setText(String.valueOf(primerProducto.getCantidadStock()));
+        }
+    }
+
+    // Cerrar la conexión
+    conexion.close();
+} catch (SQLException ex) {
+    // Manejar la excepción específica (puedes mostrar un mensaje de error, registrar, etc.)
+    ex.printStackTrace();
+} catch (Exception ex) {
+    // Manejar otras excepciones no previstas (si las hay)
+    ex.printStackTrace();
+}
+    }//GEN-LAST:event_Lista_ProductosActionPerformed
+
+    private void LIMPIAR_TODOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIMPIAR_TODOActionPerformed
+       // Obtener el modelo de la tabla
+    DefaultTableModel modeloTabla = (DefaultTableModel) TableVenta.getModel();
+
+    // Verificar si hay filas en la tabla
+    int filas = modeloTabla.getRowCount();
+
+    if (filas > 0) {
+        // Crear un mensaje con la información de los datos en la tabla
+        StringBuilder mensajeDatos = new StringBuilder("Datos en la tabla:\n");
+
+        // Obtener la cantidad de columnas en la tabla
+        int columnas = TableVenta.getColumnCount();
+
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                Object valorCelda = TableVenta.getValueAt(i, j);
+                // Asumiendo que la primera columna contiene algún identificador único
+                if (j == 0) {
+                    mensajeDatos.append("ID: ");
+                }
+                mensajeDatos.append(TableVenta.getColumnName(j)).append(": ").append(valorCelda).append("  ");
+            }
+            mensajeDatos.append("\n");
+        }
+
+        // Mostrar un mensaje de confirmación
+        int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea finalizar la compra?\n\n" + mensajeDatos.toString(), "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        // Verificar la respuesta del usuario
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            // Limpiar todos los datos del modelo
+            modeloTabla.setRowCount(0);
+
+            // Reiniciar el campo TotalPagar
+            TotalPagar.setText("- - - -");
+
+            // Limpiar otros campos
+            txtRFC.setText("");
+            txtNombreCliente.setText("");
+
+            // Actualizar la interfaz gráfica
+            TableVenta.updateUI();
+
+            // Mostrar mensaje de éxito
+            JOptionPane.showMessageDialog(this, "Compra finalizada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        }
+    } else {
+        // No hay datos en la tabla
+        JOptionPane.showMessageDialog(this, "No hay datos en la tabla.", "Información", JOptionPane.INFORMATION_MESSAGE);
+    }
+    }//GEN-LAST:event_LIMPIAR_TODOActionPerformed
+
+    private void TotalPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TotalPagarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TotalPagarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField ID_producto;
+    private javax.swing.JButton LIMPIAR_TODO;
     private javax.swing.JComboBox<String> Lista_Productos;
     private com.toedter.calendar.JDateChooser Midate;
     private javax.swing.JTable TableVenta;

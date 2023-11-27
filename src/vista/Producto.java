@@ -1,5 +1,5 @@
 package vista;
-import java.sql.Connection;
+
 public class Producto {
     private int idProducto;
     private String nombre;
@@ -16,10 +16,6 @@ public class Producto {
         this.precio = precio;
         this.cantidadStock = cantidadStock;
         this.categoria = categoria;
-    }
-
-    Producto(int idProducto, String nombreProducto, String descripcion, double precio, int cantidadStock) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     // Getters
@@ -60,9 +56,5 @@ public class Producto {
     // Método para obtener el ID
     public String getID() {
         return Integer.toString(idProducto);
-    }
-
-    boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
