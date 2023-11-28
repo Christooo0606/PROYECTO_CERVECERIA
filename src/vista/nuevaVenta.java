@@ -405,7 +405,7 @@ public class nuevaVenta extends javax.swing.JPanel {
         });
         jPanel2.add(TotalPagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 380, 90, -1));
 
-        Lista_Productos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        Lista_Productos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mostrar" }));
         Lista_Productos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Lista_ProductosActionPerformed(evt);
@@ -820,56 +820,102 @@ private double calcularTotalAPagar() {
     }//GEN-LAST:event_Lista_ProductosActionPerformed
 
     private void LIMPIAR_TODOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIMPIAR_TODOActionPerformed
-       // Obtener el modelo de la tabla
+      // Obtener el modelo de la tabla
     DefaultTableModel modeloTabla = (DefaultTableModel) TableVenta.getModel();
 
     // Verificar si hay filas en la tabla
     int filas = modeloTabla.getRowCount();
 
     if (filas > 0) {
-        // Crear un mensaje con la información de los datos en la tabla
-        StringBuilder mensajeDatos = new StringBuilder("Datos en la tabla:\n");
+        // Limpiar campos que se seleccionaron
+        txtNombreCliente.setText("");
+        txtRFC.setText("");
+
+        // Obtener el total a pagar
+        double totalPagar = calcularTotal(modeloTabla);
+
+        // Mostrar un mensaje con la información de la compra
+        StringBuilder mensajeCompra = new StringBuilder("Detalles de la compra:\n");
+        mensajeCompra.append("Nombre: ").append(txtNombreCliente.getText()).append("\n");
+        mensajeCompra.append("RFC: ").append(txtRFC.getText()).append("\n\n");
+        mensajeCompra.append("Detalles de la compra:\n");
 
         // Obtener la cantidad de columnas en la tabla
         int columnas = TableVenta.getColumnCount();
 
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
-                Object valorCelda = TableVenta.getValueAt(i, j);
-                // Asumiendo que la primera columna contiene algún identificador único
-                if (j == 0) {
-                    mensajeDatos.append("ID: ");
-                }
-                mensajeDatos.append(TableVenta.getColumnName(j)).append(": ").append(valorCelda).append("  ");
+                Object valorCelda = modeloTabla.getValueAt(i, j);
+                mensajeCompra.append(TableVenta.getColumnName(j)).append(": ").append(valorCelda).append("  ");
             }
-            mensajeDatos.append("\n");
+            mensajeCompra.append("\n");
         }
 
-        // Mostrar un mensaje de confirmación
-        int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea finalizar la compra?\n\n" + mensajeDatos.toString(), "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        // Mostrar el total a pagar
+        mensajeCompra.append("\nTotal a pagar: ").append(totalPagar);
 
-        // Verificar la respuesta del usuario
-        if (confirmacion == JOptionPane.YES_OPTION) {
-            // Limpiar todos los datos del modelo
-            modeloTabla.setRowCount(0);
+        // Mostrar opciones de ver más, aceptar o cancelar
+        Object[] opciones = {"Ver más", "Aceptar", "Cancelar"};
+        int seleccion = JOptionPane.showOptionDialog(this, mensajeCompra.toString(), "Confirmación de compra", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opciones, opciones[0]);
 
-            // Reiniciar el campo TotalPagar
-            TotalPagar.setText("- - - -");
-
-            // Limpiar otros campos
-            txtRFC.setText("");
-            txtNombreCliente.setText("");
-
-            // Actualizar la interfaz gráfica
-            TableVenta.updateUI();
-
-            // Mostrar mensaje de éxito
-            JOptionPane.showMessageDialog(this, "Compra finalizada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        // Realizar acciones según la opción seleccionada
+        switch (seleccion) {
+            case 0:
+                // Opción "Ver más" - Mostrar una lista de todo lo que se compró y su costo
+                mostrarDetallesCompra(modeloTabla);
+                break;
+            case 1:
+                // Opción "Aceptar" - Limpiar datos y mostrar mensaje de éxito
+                limpiarDatos(modeloTabla);
+                break;
+            default:
+                // Opción "Cancelar" - No hacer nada
+                break;
         }
     } else {
         // No hay datos en la tabla
         JOptionPane.showMessageDialog(this, "No hay datos en la tabla.", "Información", JOptionPane.INFORMATION_MESSAGE);
     }
+}
+
+// Método para calcular el total a pagar
+private double calcularTotal(DefaultTableModel modeloTabla) {
+    int filas = modeloTabla.getRowCount();
+    double total = 0;
+
+    for (int i = 0; i < filas; i++) {
+        // Asumiendo que la columna 4 contiene el costo del producto
+        total += Double.parseDouble(modeloTabla.getValueAt(i, 4).toString());
+    }
+
+    return total;
+}
+
+// Método para mostrar detalles de la compra
+private void mostrarDetallesCompra(DefaultTableModel modeloTabla) {
+    // Mostrar una lista de todo lo que se compró y su costo
+    // (Puedes implementar esta parte según tus necesidades)
+    // Puedes usar un nuevo JOptionPane, una ventana emergente, o cualquier otro enfoque.
+}
+
+// Método para limpiar datos después de aceptar la compra
+private void limpiarDatos(DefaultTableModel modeloTabla) {
+    // Limpiar todos los datos del modelo
+    modeloTabla.setRowCount(0);
+
+    // Reiniciar el campo TotalPagar
+    TotalPagar.setText("- - - -");
+
+    // Limpiar otros campos
+    txtRFC.setText("");
+    txtNombreCliente.setText("");
+
+    // Actualizar la interfaz gráfica
+    TableVenta.updateUI();
+
+    // Mostrar mensaje de éxito
+    JOptionPane.showMessageDialog(this, "Compra finalizada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
     }//GEN-LAST:event_LIMPIAR_TODOActionPerformed
 
     private void TotalPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TotalPagarActionPerformed
