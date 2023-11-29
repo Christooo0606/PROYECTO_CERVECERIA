@@ -29,7 +29,6 @@ public class clientes extends javax.swing.JPanel {
         txtNombreCliente = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         txtApellidosCliente = new javax.swing.JTextField();
-        txtIDCliente = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         btnGuardarCliente = new javax.swing.JButton();
         btnEliminarCliente = new javax.swing.JButton();
@@ -45,6 +44,7 @@ public class clientes extends javax.swing.JPanel {
         txtCorreoCliente = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
         txtClaveCliente1 = new javax.swing.JTextField();
+        Actualizar = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(153, 153, 153));
 
@@ -97,18 +97,8 @@ public class clientes extends javax.swing.JPanel {
         });
         jPanel9.add(txtApellidosCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 100, 160, 30));
 
-        txtIDCliente.setBackground(new java.awt.Color(255, 255, 255));
-        txtIDCliente.setForeground(new java.awt.Color(0, 0, 0));
-        txtIDCliente.setBorder(null);
-        txtIDCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIDClienteActionPerformed(evt);
-            }
-        });
-        jPanel9.add(txtIDCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 250, 70, 30));
-
         jLabel14.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel14.setText("ID");
+        jLabel14.setText("Acrtualizar Tabla");
         jPanel9.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, -1, -1));
 
         btnGuardarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/GuardarTodo.png"))); // NOI18N
@@ -279,6 +269,16 @@ public class clientes extends javax.swing.JPanel {
         });
         jPanel9.add(txtClaveCliente1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 200, 160, 30));
 
+        Actualizar.setBackground(new java.awt.Color(102, 255, 204));
+        Actualizar.setText("-");
+        Actualizar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        Actualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ActualizarActionPerformed(evt);
+            }
+        });
+        jPanel9.add(Actualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 260, 60, 20));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -321,19 +321,107 @@ public class clientes extends javax.swing.JPanel {
     
       
     private void btnGuardarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarClienteActionPerformed
-          clientesDAO dao = new clientesDAO();
-          actualizarDesdeDAO(dao);
+      // Obtener la fila seleccionada
+    int filaSeleccionada = TableCliente.getSelectedRow();
+
+    if (filaSeleccionada == -1) {
+        JOptionPane.showMessageDialog(this, "Seleccione una fila para editar.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Obtener los datos de la fila seleccionada
+    int idCliente = (int) TableCliente.getValueAt(filaSeleccionada, 0);
+    String nombre = (String) TableCliente.getValueAt(filaSeleccionada, 1);
+    String apellidos = (String) TableCliente.getValueAt(filaSeleccionada, 2);
+    String correo = (String) TableCliente.getValueAt(filaSeleccionada, 3);
+    String clave = (String) TableCliente.getValueAt(filaSeleccionada, 4);
+
+    // Mostrar los datos en los campos de edición
+    
+    txtNombreCliente.setText(nombre);
+    txtApellidosCliente.setText(apellidos);
+    txtCorreoCliente.setText(correo);
+    txtClaveCliente1.setText(clave);
+
+    // Permitir que el usuario modifique los datos...
+
+    // Luego, cuando el usuario presiona el botón "Guardar Cliente":
+    // Obtener los nuevos datos desde los campos de edición
+    String nuevoNombre = txtNombreCliente.getText();
+    String nuevoApellidos = txtApellidosCliente.getText();
+    String nuevoCorreo = txtCorreoCliente.getText();
+    String nuevaClave = txtClaveCliente1.getText();
+
+    // Actualizar el cliente en la base de datos
+    clientesDAO dao = new clientesDAO();
+    clientes clienteActualizado = new clientes();
+    clienteActualizado.setNoclientes(idCliente);
+    clienteActualizado.setNombre(nuevoNombre);
+    clienteActualizado.setApellidos(nuevoApellidos);
+    clienteActualizado.setCorreo(nuevoCorreo);
+    clienteActualizado.setClave(nuevaClave);
+
+    boolean actualizado = dao.actualizarCliente(clienteActualizado);
+
+    if (actualizado) {
+        JOptionPane.showMessageDialog(this, "Cliente actualizado con éxito.");
+        // Volver a cargar los datos en la tabla desde la base de datos
+        dao.cargarDatosEnTabla(TableCliente);
+    } else {
+        JOptionPane.showMessageDialog(this, "Error al actualizar el cliente.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    // Limpiar los campos de edición después de guardar
+    limpiarCampos();
+}
+
+// Método para limpiar los campos de edición
+private void limpiarCampos() {
+    
+    txtNombreCliente.setText("");
+    txtApellidosCliente.setText("");
+    txtCorreoCliente.setText("");
+    txtClaveCliente1.setText("");
     }//GEN-LAST:event_btnGuardarClienteActionPerformed
 
     private void btnEliminarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarClienteActionPerformed
-      
+       // Obtener la fila seleccionada
+    int filaSeleccionada = TableCliente.getSelectedRow();
+
+    // Verificar si se ha seleccionado una fila
+    if (filaSeleccionada == -1) {
+        JOptionPane.showMessageDialog(this, "Seleccione un cliente para eliminar.",
+                "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Obtener el ID del cliente de la fila seleccionada
+    int idCliente = (int) TableCliente.getValueAt(filaSeleccionada, 0);
+
+    // Instanciar la clase clientesDAO
+    clientesDAO dao = new clientesDAO();
+
+    // Llamar al método eliminarCliente y verificar si la eliminación fue exitosa
+    boolean eliminado = dao.eliminarCliente(idCliente);
+
+    // Verificar el resultado de la eliminación
+    if (eliminado) {
+        // Mostrar mensaje de éxito
+        JOptionPane.showMessageDialog(this, "Cliente eliminado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+        // Actualizar la tabla después de la eliminación
+           actualizarDesdeDAO(dao);
+    } else {
+        // Mostrar mensaje de error
+        JOptionPane.showMessageDialog(this, "Error al eliminar el cliente.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_btnEliminarClienteActionPerformed
 
     private void btnNuevoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoClienteActionPerformed
          String nombre = txtNombreCliente.getText();
     String apellidos = txtApellidosCliente.getText();
     String correo = txtCorreoCliente.getText();
-    String clave = txtIDCliente.getText();
+    
 
     // Crear un objeto clientes con los datos obtenidos
     clientes nuevoCliente = new clientes();
@@ -355,7 +443,7 @@ public class clientes extends javax.swing.JPanel {
         txtNombreCliente.setText("");
         txtApellidosCliente.setText("");
         txtCorreoCliente.setText("");
-        txtIDCliente.setText("");
+    
 
         // Mostrar mensaje de éxito
         JOptionPane.showMessageDialog(this, "Cliente registrado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
@@ -375,10 +463,6 @@ public class clientes extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtApellidosClienteActionPerformed
 
-    private void txtIDClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDClienteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtIDClienteActionPerformed
-
     private void txtCorreoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoClienteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCorreoClienteActionPerformed
@@ -387,8 +471,14 @@ public class clientes extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtClaveCliente1ActionPerformed
 
+    private void ActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ActualizarActionPerformed
+        clientesDAO dao = new clientesDAO();
+      actualizarDesdeDAO(dao);
+    }//GEN-LAST:event_ActualizarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Actualizar;
     public javax.swing.JTable TableCliente;
     private javax.swing.JButton btnEliminarCliente;
     private javax.swing.JButton btnGuardarCliente;
@@ -410,7 +500,6 @@ public class clientes extends javax.swing.JPanel {
     private javax.swing.JTextField txtApellidosCliente;
     private javax.swing.JTextField txtClaveCliente1;
     private javax.swing.JTextField txtCorreoCliente;
-    private javax.swing.JTextField txtIDCliente;
     private javax.swing.JTextField txtNombreCliente;
     // End of variables declaration//GEN-END:variables
 private int noclientes;
