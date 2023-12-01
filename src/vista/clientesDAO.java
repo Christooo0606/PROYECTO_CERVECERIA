@@ -20,7 +20,7 @@ public class clientesDAO {
         model.addColumn("Nombre");
         model.addColumn("Apellidos");
         model.addColumn("Correo");
-        model.addColumn("Clave");
+        model.addColumn("RFC");
 
         try (Connection conexion = DriverManager.getConnection(URL, USUARIO, CONTRASENA)) {
             String sql = "SELECT * FROM clientes";
@@ -32,7 +32,7 @@ public class clientesDAO {
                         resultSet.getString("Nombre"),
                         resultSet.getString("Apellidos"),
                         resultSet.getString("Correo"),
-                        resultSet.getString("Clave")
+                        resultSet.getString("RFC")
                     };
                     model.addRow(rowData);
                 }
@@ -85,7 +85,7 @@ public class clientesDAO {
                             resultSet.getString("Nombre"),
                             resultSet.getString("Apellidos"),
                             resultSet.getString("Correo"),
-                            resultSet.getString("Clave")
+                            resultSet.getString("RFC")
                     };
                     model.addRow(rowData);
                 }

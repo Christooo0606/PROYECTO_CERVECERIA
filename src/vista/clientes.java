@@ -42,9 +42,9 @@ public class clientes extends javax.swing.JPanel {
         jLabel41 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         txtCorreoCliente = new javax.swing.JTextField();
-        jLabel16 = new javax.swing.JLabel();
-        txtClaveCliente1 = new javax.swing.JTextField();
         Actualizar = new javax.swing.JButton();
+        txtRFCCliente1 = new javax.swing.JTextField();
+        jLabel17 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(153, 153, 153));
 
@@ -53,7 +53,7 @@ public class clientes extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID", "NOMBRE", "APELLIDO", "CORREO", "CLAVE"
+                "ID", "NOMBRE", "APELLIDO", "CORREO", "RFC"
             }
         ));
         TableCliente.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -99,7 +99,7 @@ public class clientes extends javax.swing.JPanel {
 
         jLabel14.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel14.setText("Acrtualizar Tabla");
-        jPanel9.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, -1, -1));
+        jPanel9.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, -1, -1));
 
         btnGuardarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/GuardarTodo.png"))); // NOI18N
         btnGuardarCliente.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -255,20 +255,6 @@ public class clientes extends javax.swing.JPanel {
         });
         jPanel9.add(txtCorreoCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 150, 160, 30));
 
-        jLabel16.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel16.setText("Clave:");
-        jPanel9.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, -1, -1));
-
-        txtClaveCliente1.setBackground(new java.awt.Color(255, 255, 255));
-        txtClaveCliente1.setForeground(new java.awt.Color(0, 0, 0));
-        txtClaveCliente1.setBorder(null);
-        txtClaveCliente1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtClaveCliente1ActionPerformed(evt);
-            }
-        });
-        jPanel9.add(txtClaveCliente1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 200, 160, 30));
-
         Actualizar.setBackground(new java.awt.Color(102, 255, 204));
         Actualizar.setText("-");
         Actualizar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -277,7 +263,21 @@ public class clientes extends javax.swing.JPanel {
                 ActualizarActionPerformed(evt);
             }
         });
-        jPanel9.add(Actualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 260, 60, 20));
+        jPanel9.add(Actualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 280, 60, 20));
+
+        txtRFCCliente1.setBackground(new java.awt.Color(255, 255, 255));
+        txtRFCCliente1.setForeground(new java.awt.Color(0, 0, 0));
+        txtRFCCliente1.setBorder(null);
+        txtRFCCliente1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtRFCCliente1ActionPerformed(evt);
+            }
+        });
+        jPanel9.add(txtRFCCliente1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 220, 160, 20));
+
+        jLabel17.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel17.setText("RFC:");
+        jPanel9.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -334,14 +334,14 @@ public class clientes extends javax.swing.JPanel {
     String nombre = (String) TableCliente.getValueAt(filaSeleccionada, 1);
     String apellidos = (String) TableCliente.getValueAt(filaSeleccionada, 2);
     String correo = (String) TableCliente.getValueAt(filaSeleccionada, 3);
-    String clave = (String) TableCliente.getValueAt(filaSeleccionada, 4);
+    String rfc = (String) TableCliente.getValueAt(filaSeleccionada, 4);
 
     // Mostrar los datos en los campos de edición
     
     txtNombreCliente.setText(nombre);
     txtApellidosCliente.setText(apellidos);
     txtCorreoCliente.setText(correo);
-    txtClaveCliente1.setText(clave);
+   
 
     // Permitir que el usuario modifique los datos...
 
@@ -350,7 +350,7 @@ public class clientes extends javax.swing.JPanel {
     String nuevoNombre = txtNombreCliente.getText();
     String nuevoApellidos = txtApellidosCliente.getText();
     String nuevoCorreo = txtCorreoCliente.getText();
-    String nuevaClave = txtClaveCliente1.getText();
+   
 
     // Actualizar el cliente en la base de datos
     clientesDAO dao = new clientesDAO();
@@ -359,7 +359,7 @@ public class clientes extends javax.swing.JPanel {
     clienteActualizado.setNombre(nuevoNombre);
     clienteActualizado.setApellidos(nuevoApellidos);
     clienteActualizado.setCorreo(nuevoCorreo);
-    clienteActualizado.setClave(nuevaClave);
+   
 
     boolean actualizado = dao.actualizarCliente(clienteActualizado);
 
@@ -381,7 +381,7 @@ private void limpiarCampos() {
     txtNombreCliente.setText("");
     txtApellidosCliente.setText("");
     txtCorreoCliente.setText("");
-    txtClaveCliente1.setText("");
+    
     }//GEN-LAST:event_btnGuardarClienteActionPerformed
 
     private void btnEliminarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarClienteActionPerformed
@@ -419,8 +419,8 @@ private void limpiarCampos() {
 
     private void btnNuevoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoClienteActionPerformed
          String nombre = txtNombreCliente.getText();
-    String apellidos = txtApellidosCliente.getText();
-    String correo = txtCorreoCliente.getText();
+         String apellidos = txtApellidosCliente.getText();
+         String correo = txtCorreoCliente.getText();
     
 
     // Crear un objeto clientes con los datos obtenidos
@@ -467,14 +467,14 @@ private void limpiarCampos() {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCorreoClienteActionPerformed
 
-    private void txtClaveCliente1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClaveCliente1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtClaveCliente1ActionPerformed
-
     private void ActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ActualizarActionPerformed
         clientesDAO dao = new clientesDAO();
       actualizarDesdeDAO(dao);
     }//GEN-LAST:event_ActualizarActionPerformed
+
+    private void txtRFCCliente1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRFCCliente1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtRFCCliente1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -487,7 +487,7 @@ private void limpiarCampos() {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel41;
     private javax.swing.JPanel jPanel26;
     private javax.swing.JPanel jPanel27;
@@ -498,9 +498,9 @@ private void limpiarCampos() {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField txtApellidosCliente;
-    private javax.swing.JTextField txtClaveCliente1;
     private javax.swing.JTextField txtCorreoCliente;
     private javax.swing.JTextField txtNombreCliente;
+    private javax.swing.JTextField txtRFCCliente1;
     // End of variables declaration//GEN-END:variables
 private int noclientes;
     private String nombre;

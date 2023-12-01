@@ -41,6 +41,8 @@ public class usuarios extends javax.swing.JPanel {
         jPanel17 = new javax.swing.JPanel();
         jPanel18 = new javax.swing.JPanel();
         jLabel39 = new javax.swing.JLabel();
+        btnIniciar1 = new javax.swing.JButton();
+        btnIniciar2 = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
         TableUsuarios = new javax.swing.JTable();
 
@@ -58,6 +60,7 @@ public class usuarios extends javax.swing.JPanel {
         jPanel13.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 163, -1, -1));
 
         txtCorreo.setBackground(new java.awt.Color(204, 204, 204));
+        txtCorreo.setText("prueba2@gmial.com");
         txtCorreo.setBorder(null);
         txtCorreo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -67,20 +70,26 @@ public class usuarios extends javax.swing.JPanel {
         jPanel13.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 126, 226, 30));
 
         txtPass.setBackground(new java.awt.Color(204, 204, 204));
+        txtPass.setText("123456");
         txtPass.setBorder(null);
+        txtPass.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPassActionPerformed(evt);
+            }
+        });
         jPanel13.add(txtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 182, 226, 30));
 
-        btnIniciar.setBackground(new java.awt.Color(0, 110, 255));
+        btnIniciar.setBackground(new java.awt.Color(255, 51, 51));
         btnIniciar.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         btnIniciar.setForeground(new java.awt.Color(255, 255, 255));
-        btnIniciar.setText("Registrar");
+        btnIniciar.setText("Eliminar");
         btnIniciar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnIniciar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIniciarActionPerformed(evt);
             }
         });
-        jPanel13.add(btnIniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 341, 226, 34));
+        jPanel13.add(btnIniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 340, 70, 34));
 
         jLabel36.setFont(new java.awt.Font("Times New Roman", 3, 14)); // NOI18N
         jLabel36.setForeground(new java.awt.Color(0, 0, 255));
@@ -88,6 +97,7 @@ public class usuarios extends javax.swing.JPanel {
         jPanel13.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 219, -1, -1));
 
         txtNombre.setBackground(new java.awt.Color(204, 204, 204));
+        txtNombre.setText("Usuario2");
         txtNombre.setBorder(null);
         jPanel13.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 243, 226, 30));
 
@@ -97,6 +107,11 @@ public class usuarios extends javax.swing.JPanel {
         jPanel13.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, -1, -1));
 
         cbxRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador", "Asistente" }));
+        cbxRol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxRolActionPerformed(evt);
+            }
+        });
         jPanel13.add(cbxRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 304, 226, 30));
 
         jPanel15.setBackground(new java.awt.Color(0, 110, 255));
@@ -167,9 +182,38 @@ public class usuarios extends javax.swing.JPanel {
 
         jPanel13.add(jPanel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 60));
 
+        btnIniciar1.setBackground(new java.awt.Color(0, 110, 255));
+        btnIniciar1.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+        btnIniciar1.setForeground(new java.awt.Color(255, 255, 255));
+        btnIniciar1.setText("Registrar");
+        btnIniciar1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnIniciar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIniciar1ActionPerformed(evt);
+            }
+        });
+        jPanel13.add(btnIniciar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 341, 70, 34));
+
+        btnIniciar2.setBackground(new java.awt.Color(255, 255, 102));
+        btnIniciar2.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+        btnIniciar2.setForeground(new java.awt.Color(255, 255, 255));
+        btnIniciar2.setText("Editar");
+        btnIniciar2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnIniciar2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIniciar2ActionPerformed(evt);
+            }
+        });
+        jPanel13.add(btnIniciar2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 340, 70, 34));
+
         TableUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {"1", "Brandon", "Brandon@gmail.com", "Administrador"},
+                {"2", "Eric", "Eric@gmail.com", "Administrador"},
+                {"3", "Karel", "Karel@gmail.com", "Administrador"},
+                {"4", "Christian", "Christian@gmail.com", "Administrador"},
+                {"5", "Usuario1", "prueba1@gmail.com", "Asistente"},
+                {"6", "Usuario2", "prueba2@gmail.com", "Asistente"}
             },
             new String [] {
                 "Id", "Nombre", "Correo", "Rol"
@@ -212,10 +256,28 @@ public class usuarios extends javax.swing.JPanel {
       
     }//GEN-LAST:event_btnIniciarActionPerformed
 
+    private void cbxRolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxRolActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbxRolActionPerformed
+
+    private void btnIniciar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciar1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnIniciar1ActionPerformed
+
+    private void btnIniciar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciar2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnIniciar2ActionPerformed
+
+    private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPassActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPassActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TableUsuarios;
     private javax.swing.JButton btnIniciar;
+    private javax.swing.JButton btnIniciar1;
+    private javax.swing.JButton btnIniciar2;
     private javax.swing.JComboBox<String> cbxRol;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;

@@ -4,6 +4,8 @@
  */
 package vista;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Jhair
@@ -36,10 +38,12 @@ public class ventas extends javax.swing.JPanel {
 
         TableVentas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {"1", "Brandon", "Supermercados", "$300"},
+                {"2", "Brandon", "Modelorama", "$300"},
+                {"3", "Brandon", "Cliente Independiente", "$500"}
             },
             new String [] {
-                "ID", "CLIENTE", "VENDEDOR", "TOTAL"
+                "ID_CARRITO", "CLIENTE", "SUCURSAL", "TOTAL A PAGAR"
             }
         ));
         TableVentas.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -56,9 +60,15 @@ public class ventas extends javax.swing.JPanel {
             }
         });
 
+        txtIdVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdVentaActionPerformed(evt);
+            }
+        });
+
         jLabel16.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel16.setText("Historial Ventas");
+        jLabel16.setText("PEDIDOS");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -104,9 +114,43 @@ public class ventas extends javax.swing.JPanel {
     }//GEN-LAST:event_TableVentasMouseClicked
 
     private void btnPdfVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPdfVentasActionPerformed
+  // Obtén el valor del campo txtIdVenta
+    String idVentaStr = txtIdVenta.getText();
+
+    try {
+        // Convierte el valor a un número entero
+        int idVenta = Integer.parseInt(idVentaStr);
+
+        // Verifica el valor de idVenta y muestra el mensaje correspondiente
+        if (idVenta == 1) {
+            mostrarMensaje("Modelo Negra", 10, 30.00, 300.00, "Supermercados", "2023-12-03");
+        } else if (idVenta == 2) {
+            mostrarMensaje("Bud Light", 20, 15.00, 300.00, "Modelorama", "2023-12-05");
+        } else if (idVenta == 3) {
+            mostrarMensaje("Montejo", 25, 20.00, 500.00, "Cliente Independiente", "2023-12-04");
+        } else {
+            // Si el valor no es 1, 2 ni 3, muestra un mensaje de error
+            JOptionPane.showMessageDialog(this, "Venta no encontrada.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    } catch (NumberFormatException e) {
+        // Si el valor no es un número válido, muestra un mensaje de error
+        JOptionPane.showMessageDialog(this, "Ingrese un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+// Método para mostrar el mensaje con la información de la venta
+private void mostrarMensaje(String producto, int cantidad, double precioUnitario, double totalPagar, String sucursal, String fechaEntrega) {
+    String mensaje = String.format("Nombre del producto: %s%nCantidad: %d%nPrecio Unitario: $%.2f%nTotal a pagar: $%.2f%nSucursal: %s%nFecha de entrega: %s",
+            producto, cantidad, precioUnitario, totalPagar, sucursal, fechaEntrega);
+
+    JOptionPane.showMessageDialog(this, mensaje, "Información de la Venta", JOptionPane.INFORMATION_MESSAGE);
 
    
     }//GEN-LAST:event_btnPdfVentasActionPerformed
+
+    private void txtIdVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdVentaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdVentaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -4,6 +4,8 @@
  */
 package vista;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Jhair
@@ -179,14 +181,24 @@ public class login extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void ingresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingresarActionPerformed
-     // Crea una instancia del nuevo JFrame que deseas abrir
-    vista.system sistemaFrame = new vista.system();
-    
-    // Hace que el nuevo JFrame sea visible
-    sistemaFrame.setVisible(true);
-    
-    // Cierra o realiza otras acciones en el JFrame actual si es necesario
-    this.dispose();
+      String usuario = jTextField1.getText();
+    String contrasena = new String(jPasswordField1.getPassword());
+
+    // Verifica si el usuario y la contraseña son "root"
+    if ("root".equals(usuario) && "root".equals(contrasena)) {
+        JOptionPane.showMessageDialog(this, "Contraseña ingresada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+        // Crea una instancia del nuevo JFrame que deseas abrir
+        vista.system sistemaFrame = new vista.system();
+
+        // Hace que el nuevo JFrame sea visible
+        sistemaFrame.setVisible(true);
+
+        // Cierra o realiza otras acciones en el JFrame actual si es necesario
+        this.dispose();
+    } else {
+        JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_ingresarActionPerformed
 
     /**
